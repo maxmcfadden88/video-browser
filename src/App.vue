@@ -1,13 +1,16 @@
 <template>
   <div class="container">
     <SearchBar @termChange="onTermChange"> </SearchBar>
-    <VideoDetail :video="selectedVideo" />
-    <VideoList @videoSelect="onVideoSelect" :videos="videos"></VideoList>
+    <div class="row">
+      <VideoDetail :video="selectedVideo" />
+      <VideoList @videoSelect="onVideoSelect" :videos="videos"></VideoList>
+    </div>
   </div>
 </template>
 
 <script>
 import axios from "axios";
+import _ from "lodash";
 import SearchBar from "./components/SearchBar";
 import VideoList from "./components/VideoList";
 import VideoDetail from "./components/VideoDetail";
@@ -24,6 +27,9 @@ export default {
   },
   data() {
     return { videos: [], selectedVideo: null };
+  },
+  created: function() {
+    this.onTermChange = _.debounce(this.onTermChange, 500);
   },
   methods: {
     onVideoSelect(video) {
